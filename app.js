@@ -67,6 +67,13 @@ app.post('/campground', async(req,res)=>{
     res.redirect(`/campground/${campground._id}`);
 })
 
+
+//deleting data
+app.delete('/campground/:id', async(req,res)=>{
+    await Campground.findByIdAndDelete(req.params.id);
+    res.redirect('/campground');
+})
+
 // app.get('/makecampground', async (req,res)=>{
 //     const camp = new Campground({
 //         title:'My Backyard',
