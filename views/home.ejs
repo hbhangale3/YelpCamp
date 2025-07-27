@@ -8,7 +8,17 @@
 </head>
 
 <body>
-    <h1>Home Yelp Camp!!</h1>
+    <h1>Campgrounds available at Yelp Camp!!</h1>
+
+    <%for(let c of camp ) { %>
+        <ul>
+            <li>
+                <a href="/campground/<%=c._id%>">
+                    <%=c.title%>
+                </a>
+            </li>
+        </ul>
+        <% } %>
 </body>
 
 </html>
