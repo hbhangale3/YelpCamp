@@ -63,7 +63,10 @@ app.patch('/campground/:id', async (req,res)=>{
 app.post('/campground', async(req,res)=>{
     const campground = new Campground({
         title: req.body.title,
-        location: req.body.location
+        location: req.body.location,
+        price: req.body.price,
+        image: req.body.image,
+        description: req.body.description
     });
     await campground.save();
     res.redirect(`/campground/${campground._id}`);
