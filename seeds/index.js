@@ -25,9 +25,13 @@ const seedDB = async() =>{
     
     for(let i=0;i<50;i++){
         const random1000 = Math.floor(Math.random()*1000);
+        const price = Math.floor(Math.random()*40)+10;
         const camp = new Campground({
             location:`${cities[random1000].city}, ${cities[random1000].state}`,
-            title: `${sample(descriptors)} ${sample(places)}`
+            title: `${sample(descriptors)} ${sample(places)}`,
+            image: 'https://picsum.photos/300',
+            price: price,
+            description: " Pitch your tent or park your RV at this tranquil riverside campground, where the gentle rush of the water provides a soothing soundtrack to your outdoor adventure. Enjoy direct access to fishing and kayaking, with well-maintained, spacious sites that offer a blend of shade and sun. Fire rings and picnic tables are provided for enjoying meals outdoors, and you'll find composting toilets and potable water within easy walking distance. The camp store provides necessities and firewood, and you'll be close enough to enjoy nearby hiking trails." 
         });
 
         await camp.save();
