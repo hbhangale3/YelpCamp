@@ -6,7 +6,8 @@ const Campground = require('./models/campground');
 const { render } = require('ejs');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-
+const catchAsync = require('./utils/catchAsync');
+const ExpressError = require('./utils/ExpressError');
 
 mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp')
 .then(()=>{
@@ -36,31 +37,31 @@ app.get('/campground/new', (req,res)=>{
 
 //show details about a campground.
 
-app.get('/campground/:id', async (req,res)=>{
+app.get('/campground/:id',catchAsync(async (req,res)=>{
     //const {id} = req.params;
     const campground = await Campground.findById(req.params.id);
     res.render('show',{campground});
-})
+}))
 
 //editing existing data
 
-app.get('/campground/:id/edit', async (req,res)=>{
+app.get('/campground/:id/edit', catchAsync(async (req,res)=>{
     //const {id} = req.params;
     const camp = await Campground.findById(req.params.id);
     res.render('edit', {camp});
-})
+}))
 
-app.patch('/campground/:id', async (req,res)=>{
+app.patch('/campground/:id',catchAsync(async (req,res)=>{
     const camp = await Campground.findById(req.params.id);
     camp.title = req.body.title;
     camp.location= req.body.location;
     await camp.save();
     res.redirect(`/campground/${camp._id}`);
-})
+}))
 
 //Handling new form data
 
-app.post('/campground', async(req,res)=>{
+app.post('/campground', catchAsync(async(req,res)=>{
     const campground = new Campground({
         title: req.body.title,
         location: req.body.location,
@@ -70,13 +71,23 @@ app.post('/campground', async(req,res)=>{
     });
     await campground.save();
     res.redirect(`/campground/${campground._id}`);
-})
+}))
 
 
 //deleting data
-app.delete('/campground/:id', async(req,res)=>{
+app.delete('/campground/:id', catchAsync(async(req,res)=>{
     await Campground.findByIdAndDelete(req.params.id);
     res.redirect('/campground');
+}))
+
+//unknown url
+app.all(/(.*)/, (req, res, next) => {
+    return next(new ExpressError("Page Not Found!", 404));
+})
+
+app.use((err,req,res,next)=>{
+    const {status = 500, message="Something went wrong"} = err;
+    res.status(status).render('error', {err});
 })
 
 // app.use((err,req,res,next)=>{
