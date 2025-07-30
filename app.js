@@ -8,6 +8,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
+const Joi = require('joi');
 
 mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp')
 .then(()=>{
@@ -52,16 +53,48 @@ app.get('/campground/:id/edit', catchAsync(async (req,res)=>{
 }))
 
 app.patch('/campground/:id',catchAsync(async (req,res)=>{
+
+    const campgroundSchema = Joi.object({
+        title: Joi.string().required(),
+        location: Joi.string().required(),
+        price: Joi.number().min(0).required(),
+        image: Joi.string().uri({ scheme: ['http', 'https'] }).required(),
+        description: Joi.string().required()
+    });
+
+    const {error} = campgroundSchema.validate(req.body, { abortEarly: false });
+    if(error){
+        const msg = error.details.map(el => el.message).join(',')
+        return next(new ExpressError(msg,400));
+    }
+
     const camp = await Campground.findById(req.params.id);
     camp.title = req.body.title;
     camp.location= req.body.location;
+    camp.price=req.body.price,
+    camp.image=req.body.image,
+    camp.description=req.body.description
     await camp.save();
     res.redirect(`/campground/${camp._id}`);
 }))
 
 //Handling new form data
 
-app.post('/campground', catchAsync(async(req,res)=>{
+app.post('/campground', catchAsync(async(req,res, next)=>{
+    const campgroundSchema = Joi.object({
+        title: Joi.string().required(),
+        location: Joi.string().required(),
+        price: Joi.number().min(0).required(),
+        image: Joi.string().uri({ scheme: ['http', 'https'] }).required(),
+        description: Joi.string().required()
+    });
+
+    const {error} = campgroundSchema.validate(req.body, { abortEarly: false });
+    if(error){
+        const msg = error.details.map(el => el.message).join(',')
+        return next(new ExpressError(msg,400));
+    }
+    
     const campground = new Campground({
         title: req.body.title,
         location: req.body.location,
