@@ -1,30 +1,45 @@
 <% layout('layout/boilerplate') %>
     <h1>Add new campground detail below</h1>
-    <form action="/campground" method="POST">
+    <form action="/campground" method="POST" novalidate class="validatedForm">
 
         <div class="mb-3">
             <label class="form-label" for="title">Add Camp Name</label>
-            <input class="form-control" type="text" id="title" name="title">
+            <input class="form-control" type="text" id="title" name="title" required>
+            <div class="valid-feedback">
+                Looks Good!
+            </div>
         </div>
 
         <div class="mb-3">
             <label class="form-label" for="location">Enter Location</label>
-            <input class="form-control" type="text" name="location" id="location">
+            <input class="form-control" type="text" name="location" id="location" required>
+            <div class="valid-feedback">
+                Looks Good!
+            </div>
         </div>
 
         <div class="mb-3">
             <label class="form-label" for="description">Enter Description</label>
-            <input class="form-control" type="text" name="description" id="description">
+            <input class="form-control" type="text" name="description" id="description" required>
+            <div class="valid-feedback">
+                Looks Good!
+            </div>
         </div>
 
         <div class="mb-3">
             <label class="form-label" for="image">Enter Image URL</label>
-            <input class="form-control" type="text" name="image" id="image">
+            <input class="form-control" type="text" name="image" id="image" required>
+            <div class="valid-feedback">
+                Looks Good!
+            </div>
         </div>
 
         <div class="mb-3">
             <label class="form-label" for="price">Enter price</label>
-            <input class="form-control" type="number" name="price" id="price">
+            <input class="form-control" type="number" name="price" id="price" required>
+            <div class="valid-feedback">
+                Looks Good!
+            </div>
         </div>
 
         <div class="mb-3">
@@ -33,4 +48,24 @@
 
     </form>
 
-    Next similarly we will also style the edit page form as well.
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (() => {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.validatedForm')
+
+            // Loop over them and prevent submission
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>

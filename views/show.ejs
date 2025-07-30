@@ -20,8 +20,12 @@
                         $<%= campground.price%>
                 </ul>
                 <div class="card-body">
-                    <a href="/campground" class="card-link">Home</a>
-                    <a href="/campground/<%=campground._id%>/edit" class="card-link">Edit Information</a>
+                    <a href="/campground" class="btn btn-info card-link">Home</a>
+                    <a href="/campground/<%=campground._id%>/edit" class="btn btn-success card-link">Edit
+                        Information</a>
+                    <form class="d-inline px-3" action="/campground/<%=campground._id%>/?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
                 </div>
             </div>
         </div>

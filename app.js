@@ -79,6 +79,13 @@ app.delete('/campground/:id', async(req,res)=>{
     res.redirect('/campground');
 })
 
+// app.use((err,req,res,next)=>{
+//     console.log("********************************");
+//     console.log("*************Error************");
+//     console.log("********************************");
+
+// })
+
 // app.get('/makecampground', async (req,res)=>{
 //     const camp = new Campground({
 //         title:'My Backyard',
