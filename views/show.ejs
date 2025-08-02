@@ -53,7 +53,7 @@
                         </h5>
                         <p class="card-text">Review: <%= review.comment %>
                         </p>
-                        <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE"
+                        <form action="/campground/<%=campground._id%>/review/<%=review._id%>?_method=DELETE"
                             method="POST">
                             <button class="btn btn-sm btn-danger">Delete</button>
                         </form>
