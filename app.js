@@ -11,6 +11,7 @@ const ExpressError = require('./utils/ExpressError');
 const Joi = require('joi');
 const {campgroundSchema, reviewSchema} = require('./schema');
 const { reverse } = require('dns');
+const session = require('express-session');
 
 const campRoutes = require('./routes/campground');
 const reviewRoutes = require('./routes/review');
@@ -31,8 +32,17 @@ app.use(express.urlencoded({extended:true}))
 app.use(methodOverride('_method'));
 app.use('/campground', campRoutes);
 app.use('/campground/:id/review', reviewRoutes);
-
-
+app.use(express.static(path.join(__dirname,'public')))
+app.use(session({
+    secret: 'thisshouldbeasecret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true, //prevent XSS attack
+        expires: Date.now()+ 1000*60*60*24*7,
+        maxAge: 1000*60*60*24*7
+    }
+}))
 
 //unknown url
 app.all(/(.*)/, (req, res, next) => {
