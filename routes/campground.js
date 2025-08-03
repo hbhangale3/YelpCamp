@@ -6,6 +6,10 @@ const ExpressError = require('../utils/ExpressError');
 const {campgroundSchema} = require('../schema');
 const router = express.Router();
 
+const flash = require('express-flash');
+
+app.use(flash());
+
 //validating campground data
 const validateCampground = (req,res,next)=>{
     const {error} = campgroundSchema.validate(req.body, { abortEarly: false });
@@ -32,7 +36,13 @@ router.get('/new', (req,res)=>{
 router.get('/:id',catchAsync(async (req,res)=>{
     //const {id} = req.params;
     const campground = await Campground.findById(req.params.id).populate('review');
-    res.render('show',{campground});
+    if(!campground){
+        req.flash('error','Cannot find the campground');
+        return res.redirect('/campground');
+    }
+    res.render('show',{campground
+        // messages: req.flash('success')
+    });
 }))
 
 //editing existing data
@@ -40,6 +50,11 @@ router.get('/:id',catchAsync(async (req,res)=>{
 router.get('/:id/edit', catchAsync(async (req,res)=>{
     //const {id} = req.params;
     const camp = await Campground.findById(req.params.id);
+
+    if(!camp){
+        req.flash('error','Cannot find the campground');
+        return res.redirect('/campground');
+    }
     res.render('edit', {camp});
 }))
 
@@ -53,6 +68,7 @@ router.patch('/:id', validateCampground ,catchAsync(async (req,res)=>{
     camp.image=req.body.image,
     camp.description=req.body.description
     await camp.save();
+    req.flash('success', 'Camp Information Updated Successfully')
     res.redirect(`/campground/${camp._id}`);
 }))
 
@@ -68,6 +84,8 @@ router.post('/', validateCampground, catchAsync(async(req,res, next)=>{
         description: req.body.description
     });
     await campground.save();
+
+    req.flash('success', 'New Camp Created Successfully')
     res.redirect(`/campground/${campground._id}`);
 }))
 
@@ -75,6 +93,7 @@ router.post('/', validateCampground, catchAsync(async(req,res, next)=>{
 //deleting data
 router.delete('/:id', catchAsync(async(req,res)=>{
     await Campground.findByIdAndDelete(req.params.id);
+    req.flash('success', 'Camp Deleted Successfully')
     res.redirect('/campground');
 }))
 

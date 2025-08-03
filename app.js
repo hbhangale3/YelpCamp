@@ -13,6 +13,9 @@ const {campgroundSchema, reviewSchema} = require('./schema');
 const { reverse } = require('dns');
 const session = require('express-session');
 
+const flash = require('express-flash');
+
+
 const campRoutes = require('./routes/campground');
 const reviewRoutes = require('./routes/review');
 
@@ -25,13 +28,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp')
     console.log(err);
 })
 
-app.engine('ejs', ejsMate);
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname,'views'));
-app.use(express.urlencoded({extended:true}))
-app.use(methodOverride('_method'));
-app.use('/campground', campRoutes);
-app.use('/campground/:id/review', reviewRoutes);
+app.use(flash());
 app.use(express.static(path.join(__dirname,'public')))
 app.use(session({
     secret: 'thisshouldbeasecret',
@@ -43,6 +40,26 @@ app.use(session({
         maxAge: 1000*60*60*24*7
     }
 }))
+
+
+app.engine('ejs', ejsMate);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname,'views'));
+app.use(express.urlencoded({extended:true}))
+app.use(methodOverride('_method'));
+
+app.use((req,res,next)=>{
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+})
+
+
+app.use('/campground', campRoutes);
+app.use('/campground/:id/review', reviewRoutes);
+
+
+
 
 //unknown url
 app.all(/(.*)/, (req, res, next) => {
