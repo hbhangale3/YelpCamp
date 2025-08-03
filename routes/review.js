@@ -6,7 +6,7 @@ const Review = require('../models/reviews');
 
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
-
+const { isLoggedIn } = require('../utils/middleware');
 const {reviewSchema} = require('../schema');
 const router = express.Router({mergeParams: true});
 
@@ -36,7 +36,7 @@ router.post('/', validateReview, catchAsync(async (req,res)=>{
 }))
 
 //deleting reviews
-router.delete('/:reviewId', catchAsync(async(req,res)=>{
+router.delete('/:reviewId', isLoggedIn, catchAsync(async(req,res)=>{
     const camp = await Campground.findById(req.params.id);
     //camp.review = camp.review.filter(id => id.toString() !== req.params.reviewId);
     camp.review.pull(req.params.reviewId);
@@ -44,6 +44,7 @@ router.delete('/:reviewId', catchAsync(async(req,res)=>{
     await camp.save();
     req.flash('success', 'Review Deleted Successfully')
     res.redirect(`/campground/${camp._id}`);
+    
 }))
 
 module.exports= router

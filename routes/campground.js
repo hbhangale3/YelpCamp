@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const {campgroundSchema} = require('../schema');
 const router = express.Router();
-
+const {isLoggedIn} = require('../utils/middleware');
 const flash = require('express-flash');
 
 app.use(flash());
@@ -27,7 +27,7 @@ router.get('/', async (req,res)=>{
     res.render('home', {camp});  
 })
 
-router.get('/new', (req,res)=>{
+router.get('/new', isLoggedIn, (req,res)=>{
     res.render('new');
 })
 
@@ -47,7 +47,7 @@ router.get('/:id',catchAsync(async (req,res)=>{
 
 //editing existing data
 
-router.get('/:id/edit', catchAsync(async (req,res)=>{
+router.get('/:id/edit',isLoggedIn, catchAsync(async (req,res)=>{
     //const {id} = req.params;
     const camp = await Campground.findById(req.params.id);
 
@@ -56,6 +56,7 @@ router.get('/:id/edit', catchAsync(async (req,res)=>{
         return res.redirect('/campground');
     }
     res.render('edit', {camp});
+    
 }))
 
 router.patch('/:id', validateCampground ,catchAsync(async (req,res)=>{
@@ -91,10 +92,12 @@ router.post('/', validateCampground, catchAsync(async(req,res, next)=>{
 
 
 //deleting data
-router.delete('/:id', catchAsync(async(req,res)=>{
+router.delete('/:id', isLoggedIn, catchAsync(async(req,res)=>{
+    const camp = await Campground.findById(req.params.id);
     await Campground.findByIdAndDelete(req.params.id);
     req.flash('success', 'Camp Deleted Successfully')
     res.redirect('/campground');
+    
 }))
 
 
