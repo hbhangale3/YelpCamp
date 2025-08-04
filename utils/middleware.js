@@ -1,6 +1,7 @@
 const {campgroundSchema, reviewSchema} = require('../schema')
 const ExpressError = require('./ExpressError');
 const Campground = require('../models/campground');
+const Review = require('../models/reviews');
 
 module.exports.isLoggedIn = (req,res,next)=>{
     if(!req.isAuthenticated()){
@@ -37,6 +38,17 @@ module.exports.isAuthor = async (req,res,next)=>{
     if(!req.user._id.equals(camp.author)){
         req.flash('error','You do not have the permission to perform the operation!');
         return res.redirect(`/campground/${camp._id}`);
+    }
+    next();
+}
+
+//checking if currentUser is authorized to make edit and delete
+module.exports.isReviewAuthor = async (req,res,next)=>{
+    const {reviewId} = req.params;
+    const review = await Review.findById(reviewId);
+    if(!req.user._id.equals(review.author)){
+        req.flash('error','You do not have the permission to perform the operation!');
+        return res.redirect(`/campground/${req.params.id}`);
     }
     next();
 }
