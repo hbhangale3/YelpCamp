@@ -18,14 +18,21 @@
                     </li>
                     <li class="list-group-item">
                         $<%= campground.price%>
+                    </li>
+                    <li class="list-group-item">
+                        Recommended By: <%= campground.author.username%>
+                    </li>
                 </ul>
                 <div class="card-body">
                     <a href="/campground" class="btn btn-info card-link">Home</a>
-                    <a href="/campground/<%=campground._id%>/edit" class="btn btn-success card-link">Edit
-                        Information</a>
-                    <form class="d-inline px-3" action="/campground/<%=campground._id%>/?_method=DELETE" method="POST">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
+                    <% if(currentUser && campground.author._id.equals(currentUser._id)) { %>
+                        <a href="/campground/<%=campground._id%>/edit" class="btn btn-success card-link">Edit
+                            Information</a>
+                        <form class="d-inline px-3" action="/campground/<%=campground._id%>/?_method=DELETE"
+                            method="POST">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                        <% } %>
                 </div>
             </div>
 
@@ -39,7 +46,9 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="review">Review</label>
-                    <textarea class="form-control" name="review" id="review" cols="30" rows="3" required></textarea>
+                    <textarea class="form-control" name="review" id="review" cols="30" rows="3" <% if(!currentUser) {%>
+                        placeholder="Please Login/Register to submit a review"
+                        <% } %> required></textarea>
                     <div class="valid-feedback">
                         Looks Good!
                     </div>
@@ -51,12 +60,16 @@
                     <div class="card-body">
                         <h5 class="card-title">Rating: <%= review.rating %>
                         </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">By <%=review.author.username %>
+                        </h6>
                         <p class="card-text">Review: <%= review.comment %>
                         </p>
-                        <form action="/campground/<%=campground._id%>/review/<%=review._id%>?_method=DELETE"
-                            method="POST">
-                            <button class="btn btn-sm btn-danger">Delete</button>
-                        </form>
+                        <% if(currentUser && campground.author._id.equals(currentUser._id)) { %>
+                            <form action="/campground/<%=campground._id%>/review/<%=review._id%>?_method=DELETE"
+                                method="POST">
+                                <button class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                            <% } %>
                     </div>
                 </div>
                 <% } %>
