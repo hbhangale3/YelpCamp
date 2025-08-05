@@ -9,36 +9,13 @@ const ExpressError = require('../utils/ExpressError');
 const { isLoggedIn, validateReview, isReviewAuthor } = require('../utils/middleware');
 const {reviewSchema} = require('../schema');
 const router = express.Router({mergeParams: true});
+const reviews = require('../controllers/reviews');
 
-
-router.get('/',(req,res)=>{
-    res.redirect(`/campground/${req.params.id}`);
-})
+router.get('/',reviews.returnToCamp)
 //creating reviews
-router.post('/', isLoggedIn, validateReview, catchAsync(async (req,res)=>{
-    const camp = await Campground.findById(req.params.id);
-    const rev = new Review({
-        comment: req.body.review,
-        rating: req.body.rating
-    })
-    rev.author = req.user._id;
-    camp.review.push(rev);
-    await rev.save();
-    await camp.save();
-    req.flash('success', 'Review Created Successfully')
-    res.redirect(`/campground/${camp._id}`);
-}))
+router.post('/', isLoggedIn, validateReview, catchAsync(reviews.createReviews))
 
 //deleting reviews
-router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(async(req,res)=>{
-    const camp = await Campground.findById(req.params.id);
-    //camp.review = camp.review.filter(id => id.toString() !== req.params.reviewId);
-    camp.review.pull(req.params.reviewId);
-    await Review.findByIdAndDelete(req.params.reviewId);
-    await camp.save();
-    req.flash('success', 'Review Deleted Successfully')
-    res.redirect(`/campground/${camp._id}`);
-    
-}))
+router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(reviews.deleteReviews))
 
 module.exports= router
