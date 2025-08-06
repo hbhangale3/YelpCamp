@@ -5,6 +5,17 @@ const Schema = mongoose.Schema;
 const campgroundSchema = new Schema({
     title: String,
     price: Number,
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point'],
+        required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
     image: [
         {
             url: String,
