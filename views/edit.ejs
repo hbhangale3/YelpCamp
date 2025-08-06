@@ -1,7 +1,13 @@
 <% layout('layout/boilerplate') %>
-    <h1>Update Campground Info below</h1>
+<link rel="stylesheet" href="/stylesheets/edit.css">
 
-    <form action="/campground/<%=camp._id%>/?_method=PATCH" method="POST" novalidate class="validatedForm"
+
+    <div class="row mb-5">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow"> 
+                <div class="card-body">
+                    <h2 class="card-title text-center">Update Campground</h2>
+                    <form action="/campground/<%=camp._id%>/?_method=PATCH" method="POST" novalidate class="validatedForm"
         enctype="multipart/form-data">
 
         <div class="mb-3">
@@ -33,6 +39,9 @@
             <label for="image" class="form-label">Upload Images</label>
             <input class="form-control" type="file" name="image" id="image" multiple>
         </div>
+
+        <div class="mb-3">
+            <label for="deleteImageCarousel" class="form-label">Delete Existing Images</label>
         <div id="deleteImageCarousel" class="carousel slide mb-3" data-bs-ride="carousel">
             <div class="carousel-inner text-center">
                 <% camp.image.forEach((img, i)=> { %>
@@ -64,6 +73,7 @@
                 </button>
                 <% } %>
         </div>
+    </div>
 
 
         <div class="mb-3">
@@ -84,6 +94,9 @@
             <button class="btn btn-danger">Go Back</button>
         </div>
     </form>
+</div>
+</div>
+</div>
 
     <script>
         // Example starter JavaScript for disabling form submissions if there are invalid fields

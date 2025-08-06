@@ -84,7 +84,9 @@ app.use('/campground', campRoutes);
 app.use('/campground/:id/review', reviewRoutes);
 app.use('/', userRoutes);
 
-
+app.get('/', (req,res)=>{
+    res.render('homescreen');
+})
 
 //unknown url
 app.all(/(.*)/, (req, res, next) => {
