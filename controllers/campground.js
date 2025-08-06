@@ -50,8 +50,14 @@ module.exports.editCampground = async (req,res)=>{
     camp.title = req.body.title;
     camp.location= req.body.location;
     camp.price=req.body.price,
-    camp.image=req.body.image,
     camp.description=req.body.description
+    const image_data = req.files.map(file=>{
+        return {
+            url: file.path,
+            filename: file.filename
+        };
+    });
+    camp.image.push(...image_data);
     await camp.save();
     req.flash('success', 'Camp Information Updated Successfully')
     res.redirect(`/campground/${camp._id}`);
@@ -63,9 +69,16 @@ module.exports.newCampground = async(req,res, next)=>{
         title: req.body.title,
         location: req.body.location,
         price: req.body.price,
-        image: req.body.image,
         description: req.body.description
     });
+
+    const image_data = req.files.map(file=>{
+        return {
+            url: file.path,
+            filename: file.filename
+        };
+    });
+    campground.image = image_data;
     campground.author = req.user._id;
     await campground.save();
 

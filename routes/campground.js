@@ -9,7 +9,9 @@ const {isLoggedIn, validateCampground, isAuthor} = require('../utils/middleware'
 const flash = require('express-flash');
 const campgrounds = require('../controllers/campground');
 app.use(flash());
-
+const multer  = require('multer')
+const {storage} = require('../cloudinary');
+const upload = multer({ storage })
 
 
 //home page
@@ -26,12 +28,11 @@ router.get('/:id',catchAsync(campgrounds.showCampground))
 
 router.get('/:id/edit',isLoggedIn, catchAsync(campgrounds.renderEditCampground))
 
-router.patch('/:id', isAuthor, validateCampground ,catchAsync(campgrounds.editCampground))
+router.patch('/:id',isLoggedIn, isAuthor,upload.array('image'), validateCampground ,catchAsync(campgrounds.editCampground))
 
 //Handling new form data
 
-router.post('/', validateCampground, catchAsync(campgrounds.newCampground))
-
+router.post('/', upload.array('image'),validateCampground,catchAsync(campgrounds.newCampground))
 
 //deleting data
 router.delete('/:id', isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground))
