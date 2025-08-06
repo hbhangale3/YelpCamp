@@ -1,4 +1,5 @@
 const Campground = require('../models/campground');
+const { cloudinary } = require('../cloudinary'); 
 
 module.exports.index = async (req,res)=>{
     const camp = await Campground.find({});
@@ -47,6 +48,8 @@ module.exports.editCampground = async (req,res)=>{
 
 
     const camp = await Campground.findById(req.params.id);
+    //console.log(req.body);
+    const images = req.body.deleteImages;
     camp.title = req.body.title;
     camp.location= req.body.location;
     camp.price=req.body.price,
@@ -58,6 +61,15 @@ module.exports.editCampground = async (req,res)=>{
         };
     });
     camp.image.push(...image_data);
+    if (req.body.deleteImages && req.body.deleteImages.length > 0) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename); // delete from Cloudinary
+        }
+
+        // 2. Remove selected images from Mongoose model
+        camp.image = camp.image.filter(img => !req.body.deleteImages.includes(img.filename));
+    }
+
     await camp.save();
     req.flash('success', 'Camp Information Updated Successfully')
     res.redirect(`/campground/${camp._id}`);
