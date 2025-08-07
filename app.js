@@ -20,6 +20,8 @@ const flash = require('express-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
+const sanitizeV5 = require('./utils/mongoSanitizeV5.js');
+app.set('query parser', 'extended');
 
 const userRoutes = require('./routes/users');
 const campRoutes = require('./routes/campground');
@@ -36,6 +38,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp')
 
 app.use(flash());
 app.use(express.static(path.join(__dirname,'public')))
+app.use(sanitizeV5({ replaceWith: '_' }));
 app.use(session({
     secret: 'thisshouldbeasecret',
     resave: false,
@@ -63,6 +66,7 @@ passport.deserializeUser(User.deserializeUser());
 
 
 app.use((req,res,next)=>{
+    // console.log(req.query);
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
