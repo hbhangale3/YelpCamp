@@ -3,7 +3,7 @@ const Campground = require('../models/campground');
 const cities = require('./cities');
 const {descriptors, places} = require('./seedHelpers');
 
-mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp')
+mongoose.connect('mongodb+srv://yelpCampTest:aEsttF1OR8LHUEOD@harsh-cluster-0.mss6cit.mongodb.net/?retryWrites=true&w=majority&appName=Harsh-Cluster-0')
 .then(()=>{
     console.log("Mongo Connection Open");
 })
@@ -27,7 +27,7 @@ const seedDB = async() =>{
         const random1000 = Math.floor(Math.random()*1000);
         const price = Math.floor(Math.random()*40)+10;
         const camp = new Campground({
-            author:'688fa438aca5b1c24f2c07f4',
+            author:'6895623ff65871c97bdd37d2',
             location:`${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(places)}`,
             geometry:{
