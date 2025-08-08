@@ -15,30 +15,23 @@ YelpCamp is a full-stack web application that allows users to discover, create, 
 ### Register / Login / Logout
 
 #### Register
-![Register Screenshot](<img width="798" height="378" alt="image" src="https://github.com/user-attachments/assets/1e5bd802-5745-4a52-bc9c-da887f8781b4" />
-
-)
+![Register Screenshot](screenshots/registration_form.png)
 **Step 2: Successful Registration**
-![Register Success](<img width="798" height="378" alt="image" src="https://github.com/user-attachments/assets/5b420a6a-fada-437f-a115-f050a4967df6" />
-)
+![Register Success](screenshots/registration_success.png)
 
 #### Login
 
 **Step 1: Login Form**
-![Login Form](<img width="1438" height="749" alt="image" src="https://github.com/user-attachments/assets/1e8f334a-4fb5-4730-84b7-11eeda87fc5b" />
-)
+![Login Form](screenshots/login_form.png)
 
 **Step 2: Login Failure Example**
-![Login Error](<img width="798" height="378" alt="image" src="https://github.com/user-attachments/assets/2878ce95-40a1-45ea-9fa7-df9ef40283d7" />
-)
+![Login Error](screenshots/login_error.png)
 
 **Step 3: Successful Login**
-![Login Success](<img width="798" height="378" alt="image" src="https://github.com/user-attachments/assets/479c9586-ceb2-4a84-9f26-ffd8193121bd" />
-)
+![Login Success](screenshots/login_success.png)
 
 #### Logout
-![Logout Screenshot](<img width="798" height="378" alt="image" src="https://github.com/user-attachments/assets/2aa0f251-9a69-405c-b272-e33c68300627" />
-)
+![Logout Screenshot](screenshots/logout.png)
 
 ---
 
@@ -59,12 +52,10 @@ YelpCamp is a full-stack web application that allows users to discover, create, 
   - **Edit or Delete** only their own campgrounds
 
 #### Create Campground
-![Create Campground Screenshot](<img width="798" height="378" alt="image" src="https://github.com/user-attachments/assets/d204add8-90c1-4410-b3c2-33654c4fbaff" />
-)
+![Create Campground Screenshot](screenshots/create_campground.png)
 
 #### Campground Detail
-![Campground Detail Screenshot](<img width="798" height="378" alt="image" src="https://github.com/user-attachments/assets/54c6f79d-6200-4347-8772-19cce4c6a3de" />
-)
+![Campground Detail Screenshot](screenshots/campground_detail.png)
 
 ---
 
@@ -75,13 +66,11 @@ YelpCamp is a full-stack web application that allows users to discover, create, 
   - **Delete only their own reviews**
 
 #### Add Review
-![Add Review Screenshot](<img width="798" height="378" alt="image" src="https://github.com/user-attachments/assets/73dfcf7e-9da3-4929-95a3-e94c3c1eab11" />
-)
+![Add Review Screenshot](screenshots/add_review.png)
 
 #### Delete Review
 Only review owners can delete:
-![Delete Review Screenshot](<img width="798" height="378" alt="image" src="https://github.com/user-attachments/assets/987dd486-d3e7-4bae-8bc1-e4d59eb18038" />
-)
+![Delete Review Screenshot](screenshots/delete_review.png)
 
 ---
 
@@ -93,8 +82,7 @@ Only review owners can delete:
   - **Delete old images** (from both Cloudinary and DB)
 
 #### Edit Form to Add New Images, Delete Existing Images and update campground information
-![Edit Campground Screenshot](<img width="798" height="378" alt="image" src="https://github.com/user-attachments/assets/eeb7c0af-b535-4499-b5ab-3472f90777af" />
-)
+![Edit Campground Screenshot](screenshots/edit_campground.png)
 
 ---
 
