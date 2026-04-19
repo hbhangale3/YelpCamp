@@ -52,8 +52,17 @@ module.exports.editCampground = async (req,res)=>{
 
     const camp = await Campground.findById(req.params.id);
     //console.log(req.body);
+
     const geoData = await maptilerClient.geocoding.forward(req.body.location, { limit: 1 });
+    if (!geoData.features?.length) {
+        req.flash('error', 'Could not geocode that location. Please try again and enter a valid location.');
+        return res.redirect(`/campgrounds/${id}/edit`);
+    }
+
+
     camp.geometry = geoData.features[0].geometry;
+    campground.location = geoData.features[0].place_name;
+    
     const images = req.body.deleteImages;
     camp.title = req.body.title;
     camp.location= req.body.location;
@@ -85,6 +94,11 @@ module.exports.newCampground = async(req,res, next)=>{
     
     const geoData = await maptilerClient.geocoding.forward(req.body.location, { limit: 1 });
     //res.send(coordinates);
+    if (!geoData.features?.length) {
+        req.flash('error', 'Could not geocode that location. Please try again and enter a valid location.');
+        return res.redirect('/campgrounds/new');
+    }
+
     const campground = new Campground({
         title: req.body.title,
         location: req.body.location,
@@ -92,6 +106,7 @@ module.exports.newCampground = async(req,res, next)=>{
         description: req.body.description
     });
     campground.geometry = geoData.features[0].geometry;
+    campground.location = geoData.features[0].place_name;
     const image_data = req.files.map(file=>{
         return {
             url: file.path,
