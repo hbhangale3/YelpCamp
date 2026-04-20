@@ -5,9 +5,31 @@ const { cloudinary } = require('../cloudinary');
 
 
 module.exports.index = async (req,res)=>{
-    const camp = await Campground.find({});
-    //console.log(camp);
-    res.render('home', {camp});  
+    // const camp = await Campground.find({});
+    // //console.log(camp);
+    // res.render('home', {camp});
+    
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit = 20;
+    const skip = (page - 1) * limit;
+
+    const totalCampgrounds = await Campground.countDocuments({});
+    const totalPages = Math.ceil(totalCampgrounds / limit);
+
+    if (page > totalPages && totalPages !== 0) {
+        return res.redirect(`/campground?page=${totalPages}`);
+    }
+
+    const camp = await Campground.find({})
+        .sort({ _id: -1 })
+        .skip(skip)
+        .limit(limit);
+
+    res.render('home', {
+        camp,
+        currentPage: page,
+        totalPages
+    });
 }
 
 module.exports.renderNewForm = (req,res)=>{
@@ -62,7 +84,7 @@ module.exports.editCampground = async (req,res)=>{
 
     camp.geometry = geoData.features[0].geometry;
     campground.location = geoData.features[0].place_name;
-    
+
     const images = req.body.deleteImages;
     camp.title = req.body.title;
     camp.location= req.body.location;
